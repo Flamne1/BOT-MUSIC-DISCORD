@@ -281,7 +281,7 @@ async def Help(ctx):
     emBed.add_field(name="Leave,", value="Leave BOT", inline=False)
     emBed.add_field(name="Join,", value="CMON", inline=False)
     emBed.add_field(name="QueueList,", value="Show queue songs(is in progress.)", inline=False)
-    emBed.set_thumbnail(url='https://scontent.fbkk8-4.fna.fbcdn.net/v/t1.15752-9/258867305_445744790505763_7418211449054647093_n.png?_nc_cat=100&ccb=1-5&_nc_sid=ae9488&_nc_eui2=AeGFO8L843ws5LAb2irAWrZxePqEhLVUz9R4-oSEtVTP1AtA9DufNeDoxLF6ItMfPT9i07tlpfVrZJWrD19IQ8LS&_nc_ohc=VYTNYRKzUrUAX-T4LXW&_nc_ht=scontent.fbkk8-4.fna&oh=03_AVK0Pq0nuOJ4axYodVsQDJKyG7dEQRBB7GgK9QNdZSMPWQ&oe=61E9996D')
+    emBed.set_thumbnail(url='#Your Thumnail Picture URL')
     await ctx.channel.send(embed=emBed)
 
 @bot.command()
@@ -385,4 +385,4 @@ async def skip(ctx):
     voice_client.stop()
     await ctx.send(f'**~{ctx.author}~**: Skipped the song!')
         
-bot.run('OTIzMjI0NDU4NDQ4MjI4Mzkz.YcM5xw.IALgWqT2MhZGQDw5z_WIdmngimI')
+bot.run('#YOUR TOKEN')
