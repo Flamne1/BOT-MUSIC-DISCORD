@@ -1,6 +1,9 @@
-
 from asyncio.queues import Queue
+from operator import ge
 from re import A
+import re
+from unittest import result
+from urllib import response
 import discord
 from discord import message
 from discord import client
@@ -20,6 +23,8 @@ import asyncio
 from async_timeout import timeout
 from functools import partial
 import itertools
+import time
+import requests
 
 # wrapper / dacorator
 
@@ -270,6 +275,7 @@ class songAPI:
         voice_client.stop()
         await ctx.send(f'**`{ctx.author}`**: Skipped the song!')
 
+#help command interspective
 @bot.command()
 async def Help(ctx):
     emBed = discord.Embed(title="Help Command", description="All avaliable bot commands", color=0x42f5a7)
@@ -281,9 +287,15 @@ async def Help(ctx):
     emBed.add_field(name="Leave,", value="Leave BOT", inline=False)
     emBed.add_field(name="Join,", value="CMON", inline=False)
     emBed.add_field(name="QueueList,", value="Show queue songs(is in progress.)", inline=False)
-    emBed.set_thumbnail(url='#Your Thumnail Picture URL')
+    emBed.add_field(name="btc,", value="Show value of THB_BTC", inline=False)
+    emBed.add_field(name="eth,", value="Show value of THB_ETH", inline=False)
+    emBed.add_field(name="zil,", value="Show value of THB_ZIL", inline=False)
+    emBed.add_field(name="sand,", value="Show value of THB_SAND", inline=False)
+    emBed.add_field(name="doge,", value="Show value of THB_DOGE", inline=False)
+    emBed.set_thumbnail(url='https://scontent.fbkk8-4.fna.fbcdn.net/v/t1.15752-9/258867305_445744790505763_7418211449054647093_n.png?_nc_cat=100&ccb=1-5&_nc_sid=ae9488&_nc_eui2=AeGFO8L843ws5LAb2irAWrZxePqEhLVUz9R4-oSEtVTP1AtA9DufNeDoxLF6ItMfPT9i07tlpfVrZJWrD19IQ8LS&_nc_ohc=VYTNYRKzUrUAX-T4LXW&_nc_ht=scontent.fbkk8-4.fna&oh=03_AVK0Pq0nuOJ4axYodVsQDJKyG7dEQRBB7GgK9QNdZSMPWQ&oe=61E9996D')
     await ctx.channel.send(embed=emBed)
 
+#play command
 @bot.command()
 async def play(ctx,* ,search: str):
     channel = ctx.author.voice.channel
@@ -298,7 +310,9 @@ async def play(ctx,* ,search: str):
     source = await YTDLSource.create_source(ctx, search, loop=bot.loop, download=False)
 
     await _player.queue.put(source)
+    
 
+#music get command
 players = {}
 def get_player(ctx):
     try:
@@ -309,7 +323,7 @@ def get_player(ctx):
 
     return player    
 
-
+#stop command
 @bot.command()
 async def stop(ctx):
     voice_client = get(bot.voice_clients, guild=ctx.guild)
@@ -322,6 +336,7 @@ async def stop(ctx):
 
     voice_client.stop()
 
+#pause command
 @bot.command()
 async def pause(ctx):
     voice_client = get(bot.voice_clients, guild=ctx.guild)
@@ -334,6 +349,7 @@ async def pause(ctx):
 
     voice_client.pause()
 
+#resume command
 @bot.command()
 async def resume(ctx):
     voice_client = get(bot.voice_clients, guild=ctx.guild)
@@ -346,12 +362,14 @@ async def resume(ctx):
 
     voice_client.resume()
 
+#leave command
 @bot.command()
 async def leave(ctx):
     channel = ctx.author.voice.channel
     await ctx.voice_client.disconnect()
     await channel.disconnect()
 
+#queuelist command(Fixed)
 @bot.command()
 async def queuelist(ctx):
     voice_client = get(bot.voice_clients, guild=ctx.guild)
@@ -369,6 +387,7 @@ async def queuelist(ctx):
 
     await ctx.send(embed)
 
+#skip command
 @bot.command()
 async def skip(ctx):
     voice_client = get(bot.voice_clients, guild=ctx.guild)
@@ -382,7 +401,97 @@ async def skip(ctx):
     elif not voice_client.is_playing():
         return
 
-    voice_client.stop()
-    await ctx.send(f'**~{ctx.author}~**: Skipped the song!')
-        
-bot.run('#YOUR TOKEN')
+@bot.command()
+async def btc(ctx):
+    channel = ctx.author.voice.channel
+    voice_client = get(bot.voice_clients, guild=ctx.guild)
+    API_HOST = 'https://api.bitkub.com'
+    while True:
+        response = requests.get(API_HOST + '/api/market/ticker')
+        result = response.json()
+
+        sym = 'THB_BTC'
+        data = result[sym]
+        last = data['last']
+        if voice_client == None or not voice_client.is_connected():         
+            await ctx.channel.send("THB_BTC", delete_after=10)
+            await ctx.channel.send([last], delete_after=10)
+            time.sleep(0.2)
+        return
+
+@bot.command()
+async def sand(ctx):
+    channel = ctx.author.voice.channel
+    voice_client = get(bot.voice_clients, guild=ctx.guild)
+    API_HOST = 'https://api.bitkub.com'
+    while True:
+        response = requests.get(API_HOST + '/api/market/ticker')
+        result = response.json()
+
+        sym = 'THB_SAND'
+        data = result[sym]
+        last = data['last']
+        if voice_client == None or not voice_client.is_connected():         
+            await ctx.channel.send("THB_SAND", delete_after=10)
+            await ctx.channel.send([last], delete_after=10)
+            time.sleep(0.2)
+        return
+
+@bot.command()
+async def zil(ctx):
+    channel = ctx.author.voice.channel
+    voice_client = get(bot.voice_clients, guild=ctx.guild)
+    API_HOST = 'https://api.bitkub.com'
+    while True:
+        response = requests.get(API_HOST + '/api/market/ticker')
+        result = response.json()
+
+        sym = 'THB_ZIL'
+        data = result[sym]
+        last = data['last']
+        if voice_client == None or not voice_client.is_connected():         
+            await ctx.channel.send("THB_ZIL", delete_after=10)
+            await ctx.channel.send([last], delete_after=10)
+            time.sleep(0.2)
+        return
+
+@bot.command()
+async def doge(ctx):
+    channel = ctx.author.voice.channel
+    voice_client = get(bot.voice_clients, guild=ctx.guild)
+    API_HOST = 'https://api.bitkub.com'
+    while True:
+        response = requests.get(API_HOST + '/api/market/ticker')
+        result = response.json()
+
+        sym = 'THB_DOGE'
+        data = result[sym]
+        last = data['last']
+        if voice_client == None or not voice_client.is_connected():         
+            await ctx.channel.send("THB_DOGE", delete_after=10)
+            await ctx.channel.send([last], delete_after=10)
+            time.sleep(0.2)
+        return
+
+@bot.command()
+async def eth(ctx):
+    channel = ctx.author.voice.channel
+    voice_client = get(bot.voice_clients, guild=ctx.guild)
+    API_HOST = 'https://api.bitkub.com'
+    while True:
+        response = requests.get(API_HOST + '/api/market/ticker')
+        result = response.json()
+
+        sym = 'THB_ETH'
+        data = result[sym]
+        last = data['last']
+        if voice_client == None or not voice_client.is_connected():         
+            await ctx.channel.send("THB_ETH", delete_after=10)
+            await ctx.channel.send([last], delete_after=10)
+            time.sleep(0.2)
+        return
+    
+
+
+#bot run command(Use Token!!)        
+bot.run('OTIzMjI0NDU4NDQ4MjI4Mzkz.YcM5xw.X1-YcjTsLp_jSIBsCJYt2Fi-_n0')
