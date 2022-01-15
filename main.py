@@ -494,4 +494,4 @@ async def eth(ctx):
 
 
 #bot run command(Use Token!!)        
-bot.run('OTIzMjI0NDU4NDQ4MjI4Mzkz.YcM5xw.X1-YcjTsLp_jSIBsCJYt2Fi-_n0')
+bot.run('YOUR TOKEN!')
